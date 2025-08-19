@@ -168,6 +168,7 @@ server.registerTool("slack_upload_file",
                    mimeType: z.string().optional() } },
   async ({ channels, filename, title, initial_comment, content, data_base64, mimeType }) => {
     if (!content && !data_base64) throw new Error("Provide either 'content' or 'data_base64'.");
+    if (content && data_base64) throw new Error("Provide either 'content' or 'data_base64', not both.");
     if (content) {
       // Simple path: send as 'content' (Slack treats it as text)
       const form = new FormData();
