@@ -1,3 +1,5 @@
+[![MSeeP.ai Security Assessment Badge](https://mseep.net/pr/idrwish-slack-power-mcp-badge.png)](https://mseep.ai/app/idrwish-slack-power-mcp)
+
 # 🚀 Slack OAuth MCP - The Ultimate Slack Integration for Claude
 
 > **Finally!** A Slack MCP that actually works the way you need it to. No more limitations, no more workarounds.
