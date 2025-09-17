@@ -107,6 +107,32 @@ server.registerTool("slack_search_messages",
   }
 );
 
+// Search messages constrained to a single channel
+server.registerTool("slack_search_in_channel",
+  { title: "Search messages in a specific channel",
+    description: "Search Slack messages limited to one channel (public or private) by channel name (e.g. #general) or ID (C…/G…).",
+    inputSchema: { channel: z.string().min(1), query: z.string().min(1), count: z.number().int().min(1).max(100).optional(),
+                   sort: z.enum(["score","timestamp"]).optional(), sort_dir: z.enum(["asc","desc"]).optional() } },
+  async ({ channel, query, count, sort, sort_dir }) => {
+    async function resolveChannelName(ch: string): Promise<string> {
+      const raw = ch.trim();
+      if (raw.startsWith("#")) return raw.slice(1);
+      if (/^[CG][A-Z0-9]+$/.test(raw)) {
+        const info = await slackGet("conversations.info", { channel: raw });
+        const c = (info as any)?.channel;
+        if (!c?.name) throw new Error("Channel not found or not accessible.");
+        return c.name as string;
+      }
+      return raw;
+    }
+
+    const channelName = await resolveChannelName(channel);
+    const searchQuery = `${query} in:#${channelName}`;
+    const data = await slackGet("search.messages", { query: searchQuery, count: count ?? 20, sort, sort_dir });
+    return { content: [{ type: "text", text: JSON.stringify(data) }] };
+  }
+);
+
 /* ---- Files (read) ---- */
 server.registerTool("slack_list_files",
   { title: "List files",

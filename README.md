@@ -59,6 +59,24 @@ Ask Claude things like:
 - *"Find all mentions of our Q4 goals in private channels"*
 - *"Send the launch update to #product and #engineering"*
 - *"Download the latest design files from our team channel"*
+
+### 🔎 Search within a specific channel
+Use the `slack_search_in_channel` tool to search by content in a single channel (public or private). You can pass a channel name (with or without the `#`) or a channel ID.
+
+Example prompts:
+
+```text
+Search "roadmap" in #product only
+```
+
+or via direct tool usage:
+
+```json
+{
+  "tool": "slack_search_in_channel",
+  "input": { "channel": "#product", "query": "roadmap", "count": 50 }
+}
+```
 - *"Search for feedback on the mobile app across all conversations"*
 
 ## 🔒 Security First
